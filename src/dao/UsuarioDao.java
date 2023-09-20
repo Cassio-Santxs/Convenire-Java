@@ -4,6 +4,7 @@
  */
 package dao;
 
+import Models.Usuario;
 import dao.ConexaoBanco;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -45,6 +46,60 @@ public class UsuarioDao {
         catch(SQLException ex) 
         {
              throw new RuntimeException(ex);
+        }
+    }
+    
+    public boolean insert(Usuario usuario) {
+        String sql = String.format(
+                "INSERT INTO tbUsuarios (dsEmail, dsSenha, nmUsuario, nrDoc) VALUES ('%s', '%s', '%s', '%s')",
+                usuario.getDsEmail(),
+                usuario.getDsSenha(),
+                usuario.getNmUsuario(),
+                usuario.getNrDoc());
+        
+        try 
+        {
+            if(conexao.conectar()) {
+                if(validaUsuario(usuario)) {
+                    PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
+                
+                    sentenca.execute();
+                    
+                    sentenca.close();
+                    this.conexao.getConnection().close();
+                } else {
+                    throw new RuntimeException("Já existe um usuário com este e-mail ou número de documento!");
+                }
+            }
+            
+            return true;
+        } 
+        catch(SQLException ex) 
+        {
+            throw new RuntimeException(ex);
+        }
+    }
+    
+    public boolean validaUsuario(Usuario usuario) {
+        String sql = String.format("SELECT * FROM tbUsuarios WHERE dsEmail = '%s' || nrDoc = '%s'", usuario.getDsEmail(), usuario.getNrDoc());
+        boolean flUsuarioValido = true;
+        
+        try 
+        {
+            if(conexao.conectar()) {
+                PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
+                
+                ResultSet rs = sentenca.executeQuery();
+                
+                if(rs.next())
+                    flUsuarioValido = false;
+            }
+            
+            return flUsuarioValido;
+        }
+        catch(SQLException ex) 
+        {
+            throw new RuntimeException(ex);
         }
     }
 }

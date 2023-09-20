@@ -127,7 +127,9 @@ public class jfHome extends javax.swing.JFrame {
     }//GEN-LAST:event_entrarBtnActionPerformed
 
     private void cadastrarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarBtnActionPerformed
-        // TODO add your handling code here:
+        jfRegistrar registrarFrame = new Telas.jfRegistrar();
+        setVisible(false);
+        registrarFrame.setVisible(true);
     }//GEN-LAST:event_cadastrarBtnActionPerformed
 
     /**

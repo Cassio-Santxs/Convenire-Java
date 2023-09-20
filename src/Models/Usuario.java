@@ -15,6 +15,10 @@ public class Usuario {
     private String dsEmail;
     private String dsSenha;
     
+    public Usuario() {
+      
+    } 
+    
     public Usuario(int idUsuario, String nmUsuario, String nrDoc, String dsEmail, String dsSenha) {
         this.idUsuario = idUsuario;     
         this.nmUsuario = nmUsuario;

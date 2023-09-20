@@ -5,6 +5,7 @@
 package Telas;
 
 import Models.Usuario;
+import dao.UsuarioDao;
 import javax.swing.JOptionPane;
 
 /**
@@ -46,7 +47,8 @@ public class jfRegistrar extends javax.swing.JFrame {
         confirmaSenhaInput = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(244, 244, 244));
 
@@ -218,6 +220,7 @@ public class jfRegistrar extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void nomeInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeInputActionPerformed
@@ -225,10 +228,44 @@ public class jfRegistrar extends javax.swing.JFrame {
     }//GEN-LAST:event_nomeInputActionPerformed
 
     private void cadastrarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarBtnActionPerformed
-        Usuario usuario;
+        Usuario usuario = new Usuario();
+        boolean flFormValido = true;
         
-        if(nomeInput.getText() == "" || nrDocInput.getText() == "" || emailInput.getText() == "" || senhaInput.getText() == "" || confirmaSenhaInput.getText() == "") {
-            JOptionPane.showMessageDialog(null, "Insira todos os dados obrigatórios!");
+        try 
+        {
+            if (nomeInput.getText().isEmpty() || nrDocInput.getText().isEmpty() || emailInput.getText().isEmpty() || senhaInput.getText().isEmpty() || confirmaSenhaInput.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Insira todos os dados obrigatórios!");
+                flFormValido = false;
+            } 
+
+            if (!senhaInput.getText().equals(confirmaSenhaInput.getText())) {
+                JOptionPane.showMessageDialog(null, "Senhas não conferem!");
+                flFormValido = false;
+            }
+        
+            if(flFormValido){
+                UsuarioDao usuarioDao = new UsuarioDao();
+
+                usuario.setNmUsuario(nomeInput.getText());
+                usuario.setNrDoc(nrDocInput.getText());
+                usuario.setDsEmail(emailInput.getText());  
+                usuario.setDsSenha(senhaInput.getText());
+
+                boolean sucesso = usuarioDao.insert(usuario);
+
+                if(sucesso) {
+                    JOptionPane.showMessageDialog(null, "Cadastro feito com sucesso!");
+                    
+                    jfLogin loginFrame = new jfLogin();
+                    loginFrame.setVisible(true);
+                    
+                    setVisible(false);
+                } 
+            } 
+        }
+        catch(Exception ex) 
+        {
+            JOptionPane.showMessageDialog(null, String.format("Não foi possível efetuar o cadastro! ERRO: %s", ex.getMessage()));
         }
     }//GEN-LAST:event_cadastrarBtnActionPerformed
 
