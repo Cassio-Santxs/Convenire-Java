@@ -4,7 +4,7 @@
  */
 package Telas;
 
-import Models.Usuario;
+import dao.UsuarioDao;
 import java.awt.Window;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -169,7 +169,7 @@ public class jfLogin extends javax.swing.JFrame {
         String login = loginInput.getText();
         String senha = new String(senhaInput.getPassword()).trim();
         
-        boolean flUsuarioExiste = new Usuario().loginUsuario(login, senha);
+        boolean flUsuarioExiste = new UsuarioDao().loginUsuario(login, senha);
         
         if(flUsuarioExiste) {
             JOptionPane.showMessageDialog(null, "Usuário autenticado!");

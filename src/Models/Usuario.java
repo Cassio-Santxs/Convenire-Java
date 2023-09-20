@@ -4,56 +4,62 @@
  */
 package Models;
 
-import dao.ConexaoBanco;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
 /**
  *
- * @author Aluno 63
+ * @author Adm
  */
 public class Usuario {
-    private ConexaoBanco conexao;
-    
     private int idUsuario;
     private String nmUsuario;
-    private String dsLogin;
     private String nrDoc;
     private String dsEmail;
     private String dsSenha;
     
-    public Usuario() {
-        this.conexao = new ConexaoBanco();
+    public Usuario(int idUsuario, String nmUsuario, String nrDoc, String dsEmail, String dsSenha) {
+        this.idUsuario = idUsuario;     
+        this.nmUsuario = nmUsuario;
+        this.nrDoc = nrDoc;
+        this.dsEmail = dsEmail;
+        this.dsSenha = dsSenha;
+    } 
+    
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
     
-    public boolean loginUsuario(String dsLogin, String dsSenha) {
-        String sql = String.format("SELECT * FROM tbUsuarios WHERE dsLogin =? AND dsSenha =?", dsLogin, dsSenha);
-        
-        boolean flUsuarioExiste = false;
-        
-        try 
-        {
-            if(conexao.conectar()) {
-                PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
-                sentenca.setString(1, dsLogin);
-                sentenca.setString(2, dsSenha);
-                
-                ResultSet rs = sentenca.executeQuery();
-                
-                if(rs.next()) {
-                    flUsuarioExiste = true;
-                }
-                
-                sentenca.close();
-                this.conexao.getConnection().close();
-            }
-            
-            return flUsuarioExiste;
-        }
-        catch(SQLException ex) 
-        {
-             throw new RuntimeException(ex);
-        }
+    public String getNmUsuario() {
+        return nmUsuario;
     }
+
+    public void setNmUsuario(String nmUsuario) {
+        this.nmUsuario = nmUsuario;
+    }
+
+    public String getNrDoc() {
+        return nrDoc;
+    }
+
+    public void setNrDoc(String nrDoc) {
+        this.nrDoc = nrDoc;
+    }
+
+    public String getDsEmail() {
+        return dsEmail;
+    }
+
+    public void setDsEmail(String dsEmail) {
+        this.dsEmail = dsEmail;
+    }
+
+    public String getDsSenha() {
+        return dsSenha;
+    }
+
+    public void setDsSenha(String dsSenha) {
+        this.dsSenha = dsSenha;
+    }   
 }
