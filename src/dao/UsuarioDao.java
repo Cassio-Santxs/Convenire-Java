@@ -21,10 +21,8 @@ public class UsuarioDao {
         this.conexao = new ConexaoBanco();
     }
     
-    public boolean loginUsuario(String dsLogin, String dsSenha) {
-        String sql = String.format("SELECT * FROM tbUsuarios WHERE dsLogin =? AND dsSenha =?", dsLogin, dsSenha);
-        
-        boolean flUsuarioExiste = false;
+    public Usuario loginUsuario(String dsEmail, String dsSenha) {
+        String sql = String.format("SELECT * FROM tbUsuarios WHERE dsEmail ='%s' AND dsSenha ='%s'", dsEmail, dsSenha);
         
         try 
         {
@@ -33,15 +31,27 @@ public class UsuarioDao {
                 
                 ResultSet rs = sentenca.executeQuery();
                 
-                if(rs.next()) {
-                    flUsuarioExiste = true;
-                }
+                if (rs.next()) {
+                
+                Usuario usuario = new Usuario();
+                
+                usuario.setIdUsuario(rs.getInt("idUsuario"));
+                usuario.setNmUsuario(rs.getString("nmUsuario")); 
+                usuario.setNrDoc(rs.getString("nrDoc")); 
+                usuario.setDsEmail(rs.getString("dsEmail"));
+                usuario.setDsSenha(rs.getString("dsSenha"));
+                
+                sentenca.close();
+                this.conexao.getConnection().close();
+                
+                return usuario;
+            }
                 
                 sentenca.close();
                 this.conexao.getConnection().close();
             }
             
-            return flUsuarioExiste;
+            return null;
         }
         catch(SQLException ex) 
         {
@@ -50,55 +60,90 @@ public class UsuarioDao {
     }
     
     public boolean insert(Usuario usuario) {
-        String sql = String.format(
-                "INSERT INTO tbUsuarios (dsEmail, dsSenha, nmUsuario, nrDoc) VALUES ('%s', '%s', '%s', '%s')",
-                usuario.getDsEmail(),
-                usuario.getDsSenha(),
-                usuario.getNmUsuario(),
-                usuario.getNrDoc());
-        
-        try 
-        {
-            if(conexao.conectar()) {
-                if(validaUsuario(usuario)) {
-                    PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
-                
-                    sentenca.execute();
-                    
-                    sentenca.close();
-                    this.conexao.getConnection().close();
-                } else {
-                    throw new RuntimeException("Já existe um usuário com este e-mail ou número de documento!");
-                }
+        if (!validaUsuario(usuario)) {
+            return false;
+        }
+
+        String sql = "INSERT INTO tbUsuarios (dsEmail, dsSenha, nmUsuario, nrDoc) VALUES (?, ?, ?, ?)";
+
+        try {
+            if (conexao.conectar()) {
+                PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
+                sentenca.setString(1, usuario.getDsEmail());
+                sentenca.setString(2, usuario.getDsSenha());
+                sentenca.setString(3, usuario.getNmUsuario());
+                sentenca.setString(4, usuario.getNrDoc());
+
+                int linhasAfetadas = sentenca.executeUpdate();
+
+                sentenca.close();
+                this.conexao.getConnection().close();
+
+                return linhasAfetadas > 0;
             }
-            
-            return true;
-        } 
-        catch(SQLException ex) 
-        {
+
+            return false; 
+        } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }
     
     public boolean validaUsuario(Usuario usuario) {
-        String sql = String.format("SELECT * FROM tbUsuarios WHERE dsEmail = '%s' || nrDoc = '%s'", usuario.getDsEmail(), usuario.getNrDoc());
+        String sql = "SELECT * FROM tbUsuarios WHERE dsEmail = ? OR nrDoc = ?";
         boolean flUsuarioValido = true;
-        
-        try 
-        {
-            if(conexao.conectar()) {
+
+        try {
+            if (conexao.conectar()) {
                 PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
-                
+                sentenca.setString(1, usuario.getDsEmail());
+                sentenca.setString(2, usuario.getNrDoc());
+
                 ResultSet rs = sentenca.executeQuery();
-                
-                if(rs.next())
+
+                if (rs.next()) {
                     flUsuarioValido = false;
+                }
+
+                sentenca.close();
+                this.conexao.getConnection().close();
             }
-            
+
             return flUsuarioValido;
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
-        catch(SQLException ex) 
-        {
+    }
+    
+    public Usuario getUsuarioById(int idUsuario) {
+        String sql = "SELECT * FROM tbUsuarios WHERE idUsuario = ?";
+
+        try {
+            if (conexao.conectar()) {
+                PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
+                sentenca.setInt(1, idUsuario); 
+
+                ResultSet rs = sentenca.executeQuery();
+
+                if (rs.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("idUsuario"));
+                    usuario.setNmUsuario(rs.getString("nmUsuario"));
+                    usuario.setNrDoc(rs.getString("nrDoc"));
+                    usuario.setDsEmail(rs.getString("dsEmail"));
+                    usuario.setDsSenha(rs.getString("dsSenha"));
+
+                    sentenca.close();
+                    this.conexao.getConnection().close();
+
+                    return usuario;
+                }
+
+                sentenca.close();
+                this.conexao.getConnection().close();
+            }
+
+            return null; 
+        } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }

@@ -4,6 +4,7 @@
  */
 package Telas;
 
+import Models.Usuario;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
@@ -12,7 +13,6 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
  * @author Aluno 63
  */
 public class jfHome extends javax.swing.JFrame {
-
     /**
      * Creates new form jfHome
      */

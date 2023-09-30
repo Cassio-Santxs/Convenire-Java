@@ -4,6 +4,7 @@
  */
 package Telas;
 
+import Models.Usuario;
 import dao.UsuarioDao;
 import java.awt.Window;
 import javax.swing.JOptionPane;
@@ -37,7 +38,7 @@ public class jfLogin extends javax.swing.JFrame {
         formContainer = new javax.swing.JPanel();
         formTitle = new javax.swing.JLabel();
         loginLabel = new javax.swing.JLabel();
-        loginInput = new javax.swing.JTextField();
+        emailInput = new javax.swing.JTextField();
         senhaLabel = new javax.swing.JLabel();
         senhaInput = new javax.swing.JPasswordField();
         loginButton = new javax.swing.JButton();
@@ -59,11 +60,11 @@ public class jfLogin extends javax.swing.JFrame {
 
         loginLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         loginLabel.setForeground(new java.awt.Color(255, 255, 255));
-        loginLabel.setLabelFor(loginInput);
-        loginLabel.setText("Login");
+        loginLabel.setLabelFor(emailInput);
+        loginLabel.setText("E-mail");
         loginLabel.setName("loginLabel"); // NOI18N
 
-        loginInput.setName("loginInput"); // NOI18N
+        emailInput.setName("emailInput"); // NOI18N
 
         senhaLabel.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         senhaLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -104,7 +105,7 @@ public class jfLogin extends javax.swing.JFrame {
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, formContainerLayout.createSequentialGroup()
                             .addGap(1, 1, 1)
                             .addGroup(formContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(loginInput, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(emailInput, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addComponent(loginLabel))))
                     .addComponent(senhaLabel))
                 .addGap(61, 61, 61))
@@ -121,7 +122,7 @@ public class jfLogin extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(loginLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(loginInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(emailInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(senhaLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -166,16 +167,17 @@ public class jfLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        String login = loginInput.getText();
+        String email = emailInput.getText();
         String senha = new String(senhaInput.getPassword()).trim();
         
-        boolean flUsuarioExiste = new UsuarioDao().loginUsuario(login, senha);
+        Usuario usuarioAutenticado = new UsuarioDao().loginUsuario(email, senha);
         
-        if(flUsuarioExiste) {
+        if(usuarioAutenticado != null) {
             JOptionPane.showMessageDialog(null, "Usuário autenticado!");
             
-            jfCadastro consultaFrame = new Telas.jfCadastro();
-            consultaFrame.setVisible(true);
+            jfMarcarConsulta marcarConsultaFrame = new Telas.jfMarcarConsulta();
+            marcarConsultaFrame.idUsuario = usuarioAutenticado.getIdUsuario();
+            marcarConsultaFrame.setVisible(true);
             
             setVisible(false);
         } else {
@@ -188,19 +190,7 @@ public class jfLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_senhaInputActionPerformed
 
     private void loginButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_loginButtonKeyPressed
-        String login = loginInput.getText();
-        String senha = new String(senhaInput.getPassword()).trim();
-        
-        if(login.matches("login") && (senha.matches("123"))) {
-            JOptionPane.showMessageDialog(null, "Usuário autenticado!");
-            
-            jfCadastro consultaFrame = new Telas.jfCadastro();
-            consultaFrame.setVisible(true);
-            
-            setVisible(false);
-        } else {
-            JOptionPane.showMessageDialog(null, "Login ou senha inválidos!");
-        }
+    
     }//GEN-LAST:event_loginButtonKeyPressed
     
     /**
@@ -240,11 +230,11 @@ public class jfLogin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Container;
+    private javax.swing.JTextField emailInput;
     private javax.swing.JPanel formContainer;
     private javax.swing.JLabel formTitle;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JButton loginButton;
-    private javax.swing.JTextField loginInput;
     private javax.swing.JLabel loginLabel;
     private javax.swing.JPasswordField senhaInput;
     private javax.swing.JLabel senhaLabel;
