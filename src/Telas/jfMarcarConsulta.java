@@ -45,8 +45,6 @@ public class jfMarcarConsulta extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jCalendar1 = new com.toedter.calendar.JCalendar();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -56,12 +54,12 @@ public class jfMarcarConsulta extends javax.swing.JFrame {
         loginLabel = new javax.swing.JLabel();
         nmPacienteInput = new javax.swing.JTextField();
         loginLabel1 = new javax.swing.JLabel();
-        dtConsultaInput = new com.toedter.calendar.JDateChooser();
         btnInserir = new javax.swing.JButton();
         loginLabel2 = new javax.swing.JLabel();
         idConsultaInput = new javax.swing.JTextField();
         btnAlterar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
+        dtConsultaInput = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -144,7 +142,6 @@ public class jfMarcarConsulta extends javax.swing.JFrame {
         loginLabel1.setName("loginLabel"); // NOI18N
 
         btnInserir.setText("Marcar");
-        btnInserir.setActionCommand("Marcar");
         btnInserir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInserirActionPerformed(evt);
@@ -220,7 +217,7 @@ public class jfMarcarConsulta extends javax.swing.JFrame {
                             .addComponent(idConsultaInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(loginLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(2, 2, 2)
                         .addComponent(dtConsultaInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(14, 14, 14)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -443,8 +440,6 @@ public class jfMarcarConsulta extends javax.swing.JFrame {
     private javax.swing.JButton btnInserir;
     private com.toedter.calendar.JDateChooser dtConsultaInput;
     private javax.swing.JTextField idConsultaInput;
-    private com.toedter.calendar.JCalendar jCalendar1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

@@ -64,15 +64,17 @@ public class UsuarioDao {
             return false;
         }
 
-        String sql = "INSERT INTO tbUsuarios (dsEmail, dsSenha, nmUsuario, nrDoc) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO tbUsuarios (dsEmail, nrTelefone, dsSenha, nmUsuario, nrDoc) VALUES (?, ?, ?, ?, ?)";
 
         try {
             if (conexao.conectar()) {
                 PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
+                
                 sentenca.setString(1, usuario.getDsEmail());
-                sentenca.setString(2, usuario.getDsSenha());
-                sentenca.setString(3, usuario.getNmUsuario());
-                sentenca.setString(4, usuario.getNrDoc());
+                sentenca.setString(2, usuario.getNrTelefone());
+                sentenca.setString(3, usuario.getDsSenha());
+                sentenca.setString(4, usuario.getNmUsuario());
+                sentenca.setString(5, usuario.getNrDoc());
 
                 int linhasAfetadas = sentenca.executeUpdate();
 

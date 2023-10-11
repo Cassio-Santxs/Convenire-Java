@@ -45,6 +45,8 @@ public class jfRegistrar extends javax.swing.JFrame {
         senhaInput = new javax.swing.JPasswordField();
         jLabel9 = new javax.swing.JLabel();
         confirmaSenhaInput = new javax.swing.JPasswordField();
+        jLabel10 = new javax.swing.JLabel();
+        telefoneInput = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -128,6 +130,18 @@ public class jfRegistrar extends javax.swing.JFrame {
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel9.setText("Confirmar Senha");
 
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel10.setText("Telefone");
+
+        telefoneInput.setMinimumSize(new java.awt.Dimension(64, 18));
+        telefoneInput.setPreferredSize(new java.awt.Dimension(64, 18));
+        telefoneInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                telefoneInputActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -135,6 +149,7 @@ public class jfRegistrar extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(90, 90, 90)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel10)
                     .addComponent(jLabel9)
                     .addComponent(jLabel8)
                     .addComponent(jLabel7)
@@ -149,7 +164,8 @@ public class jfRegistrar extends javax.swing.JFrame {
                     .addComponent(nrDocInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(emailInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(senhaInput)
-                    .addComponent(confirmaSenhaInput))
+                    .addComponent(confirmaSenhaInput)
+                    .addComponent(telefoneInput, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(90, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -171,7 +187,11 @@ public class jfRegistrar extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(emailInput, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(telefoneInput, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(senhaInput, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -179,7 +199,7 @@ public class jfRegistrar extends javax.swing.JFrame {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(confirmaSenhaInput, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGap(29, 29, 29)
                 .addComponent(cadastrarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
         );
@@ -195,17 +215,17 @@ public class jfRegistrar extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(70, 70, 70)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(70, 70, 70))
+                .addGap(77, 77, 77))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(158, 158, 158)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(181, 181, 181))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -233,7 +253,7 @@ public class jfRegistrar extends javax.swing.JFrame {
         
         try 
         {
-            if (nomeInput.getText().isEmpty() || nrDocInput.getText().isEmpty() || emailInput.getText().isEmpty() || senhaInput.getText().isEmpty() || confirmaSenhaInput.getText().isEmpty()) {
+            if (nomeInput.getText().isEmpty() || nrDocInput.getText().isEmpty() || emailInput.getText().isEmpty() || telefoneInput.getText().isEmpty() || senhaInput.getText().isEmpty() || confirmaSenhaInput.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Insira todos os dados obrigatórios!");
                 flFormValido = false;
             } 
@@ -248,6 +268,7 @@ public class jfRegistrar extends javax.swing.JFrame {
 
                 usuario.setNmUsuario(nomeInput.getText());
                 usuario.setNrDoc(nrDocInput.getText());
+                usuario.setNrTelefone(telefoneInput.getText());
                 usuario.setDsEmail(emailInput.getText());  
                 usuario.setDsSenha(senhaInput.getText());
 
@@ -276,6 +297,10 @@ public class jfRegistrar extends javax.swing.JFrame {
     private void emailInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailInputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_emailInputActionPerformed
+
+    private void telefoneInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_telefoneInputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_telefoneInputActionPerformed
 
     /**
      * @param args the command line arguments
@@ -317,6 +342,7 @@ public class jfRegistrar extends javax.swing.JFrame {
     private javax.swing.JPasswordField confirmaSenhaInput;
     private javax.swing.JTextField emailInput;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
@@ -329,5 +355,6 @@ public class jfRegistrar extends javax.swing.JFrame {
     private javax.swing.JTextField nomeInput;
     private javax.swing.JTextField nrDocInput;
     private javax.swing.JPasswordField senhaInput;
+    private javax.swing.JTextField telefoneInput;
     // End of variables declaration//GEN-END:variables
 }

@@ -99,7 +99,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="loginInput" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="emailInput" alignment="1" max="32767" attributes="0"/>
                                       <Component id="loginLabel" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -123,7 +123,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="loginLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="loginInput" min="-2" max="-2" attributes="0"/>
+                      <Component id="emailInput" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="senhaLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -156,15 +156,15 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-                  <ComponentRef name="loginInput"/>
+                  <ComponentRef name="emailInput"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Login"/>
+                <Property name="text" type="java.lang.String" value="E-mail"/>
                 <Property name="name" type="java.lang.String" value="loginLabel" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="loginInput">
+            <Component class="javax.swing.JTextField" name="emailInput">
               <Properties>
-                <Property name="name" type="java.lang.String" value="loginInput" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="emailInput" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="senhaLabel">
