@@ -11,10 +11,7 @@ import dao.ConexaoBanco;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  *
@@ -32,12 +29,6 @@ public class ConsultaDao {
 
         try {
             if (conexao.conectar()) {
-                Date hoje = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-                
-                if (consulta.getDtConsulta().before(hoje)) {
-                    throw new IllegalArgumentException("A data selecionada não pode ser passada!");
-                }
-
                 PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
 
                 sentenca.setInt(1, consulta.getIdUsuario());
@@ -51,12 +42,11 @@ public class ConsultaDao {
                 return linhasAfetadas > 0;
             }
 
-            return false;
+            return false; 
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }
-
     
     public void alterar(Consulta consulta) {
         String sql = "UPDATE tbConsultas SET dtConsulta = ? WHERE idConsulta = ?";

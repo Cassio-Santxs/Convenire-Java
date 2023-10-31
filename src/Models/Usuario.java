@@ -13,20 +13,20 @@ public class Usuario {
     private String nmUsuario;
     private String nrDoc;
     private String dsEmail;
-    private String nrTelefone;
     private String dsSenha;
+    private boolean flAdmin;
     
     public Usuario() {
       
     } 
     
-    public Usuario(int idUsuario, String nmUsuario, String nrDoc, String dsEmail, String nrTelefone, String dsSenha) {
+    public Usuario(int idUsuario, String nmUsuario, String nrDoc, String dsEmail, String dsSenha, boolean flAdmin) {
         this.idUsuario = idUsuario;     
         this.nmUsuario = nmUsuario;
         this.nrDoc = nrDoc;
         this.dsEmail = dsEmail;
-        this.nrTelefone = nrTelefone;
         this.dsSenha = dsSenha;
+        this.flAdmin = flAdmin;
     } 
     
     public int getIdUsuario() {
@@ -60,14 +60,6 @@ public class Usuario {
     public void setDsEmail(String dsEmail) {
         this.dsEmail = dsEmail;
     }
-    
-    public String getNrTelefone() {
-        return nrTelefone;
-    }
-
-    public void setNrTelefone(String nrTelefone) {
-        this.nrTelefone = nrTelefone;
-    }
 
     public String getDsSenha() {
         return dsSenha;
@@ -75,5 +67,13 @@ public class Usuario {
 
     public void setDsSenha(String dsSenha) {
         this.dsSenha = dsSenha;
-    }   
+    }  
+    
+    public boolean getFlAdmin() {
+        return flAdmin;
+    }
+
+    public void setFlAdmin(boolean flAdmin) {
+        this.flAdmin = flAdmin;
+    } 
 }
