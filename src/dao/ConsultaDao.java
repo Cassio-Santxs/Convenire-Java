@@ -5,6 +5,7 @@
 package dao;
 
 import Models.Consulta;
+import Models.Pagamento;
 import Models.Usuario;
 import dao.ConexaoBanco;
 
@@ -25,7 +26,7 @@ public class ConsultaDao {
     }
     
     public boolean insert(Consulta consulta) {
-        String sql = "INSERT INTO tbConsultas (idUsuario, dtConsulta) VALUES (?, ?)";
+        String sql = "INSERT INTO tbConsultas (idUsuario, dtConsulta, vlConsulta) VALUES (?, ?, 100)";
 
         try {
             if (conexao.conectar()) {
@@ -94,31 +95,43 @@ public class ConsultaDao {
     }
     
     public ArrayList<Consulta> consultar(int idUsuario) {
-        ArrayList<Consulta> listaConsulta = new ArrayList<Consulta>();
-        String sql = "SELECT idConsulta, dtConsulta FROM tbConsultas WHERE idUsuario = ? ORDER BY dtConsulta";
+    ArrayList<Consulta> listaConsulta = new ArrayList<Consulta>();
+    String sql = "SELECT C.idConsulta, C.dtConsulta, P.idPagamento, P.flStatus, P.dtInclusao " +
+                 "FROM tbConsultas C " +
+                 "LEFT JOIN tbPagamentos P ON C.idConsulta = P.idConsulta " +
+                 "WHERE C.idUsuario = ? " +
+                 "ORDER BY C.dtConsulta";
 
-        try {
-            if (this.conexao.conectar()) {
-                PreparedStatement sentenca = this.conexao.getConnection().prepareStatement(sql);
-                sentenca.setInt(1, idUsuario); // Use 1 em vez de 0 para definir o parâmetro
+    try {
+        if (this.conexao.conectar()) {
+            PreparedStatement sentenca = this.conexao.getConnection().prepareStatement(sql);
+            sentenca.setInt(1, idUsuario);
 
-                ResultSet resultadoSentenca = sentenca.executeQuery();
+            ResultSet resultadoSentenca = sentenca.executeQuery();
 
-                while (resultadoSentenca.next()) {
-                    Consulta consulta = new Consulta();
-                    consulta.setIdConsulta(resultadoSentenca.getInt("idConsulta"));
-                    consulta.setDtConsulta(resultadoSentenca.getTimestamp("dtConsulta")); // Use getTimestamp para obter a data e hora
+            while (resultadoSentenca.next()) {
+                Consulta consulta = new Consulta();
+                consulta.setIdConsulta(resultadoSentenca.getInt("idConsulta"));
+                consulta.setDtConsulta(resultadoSentenca.getTimestamp("dtConsulta"));
 
-                    listaConsulta.add(consulta);
-                }
+                Pagamento pagamento = new Pagamento();
+                pagamento.setIdPagamento(resultadoSentenca.getInt("idPagamento"));
+                pagamento.setFlStatus(resultadoSentenca.getString("flStatus"));
+                pagamento.setDtInclusao(resultadoSentenca.getTimestamp("dtInclusao"));
 
-                sentenca.close();
-                this.conexao.getConnection().close();
+                consulta.setPagamento(pagamento);
+
+                listaConsulta.add(consulta);
             }
+
+            sentenca.close();
+            this.conexao.getConnection().close();
+        }
 
             return listaConsulta;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }
+
 }

@@ -176,9 +176,15 @@ public class jfLogin extends javax.swing.JFrame {
         if(usuarioAutenticado != null) {
             JOptionPane.showMessageDialog(null, "Usuário autenticado!");
             
-            jfMarcarConsulta marcarConsultaFrame = new Telas.jfMarcarConsulta();
-            marcarConsultaFrame.idUsuario = usuarioAutenticado.getIdUsuario();
-            marcarConsultaFrame.setVisible(true);
+            if(!usuarioAutenticado.getFlAdmin()) {
+                jfMarcarConsulta marcarConsultaFrame = new Telas.jfMarcarConsulta();
+                marcarConsultaFrame.idUsuario = usuarioAutenticado.getIdUsuario();
+                marcarConsultaFrame.setVisible(true);
+            } else {
+                jfDashboard dashboardFrame = new Telas.jfDashboard();
+                dashboardFrame.idUsuario = usuarioAutenticado.getIdUsuario();
+                dashboardFrame.setVisible(true); 
+            }
             
             setVisible(false);
         } else {

@@ -16,6 +16,8 @@ public class Consulta {
     private Date dtConsulta;
     private Date hrConsulta;
     private boolean flSituacao;
+    private float vlConsulta;
+    private Pagamento pagamento;
 
     public Consulta() {
       
@@ -49,5 +51,21 @@ public class Consulta {
 
     public void setDtConsulta(Date dtConsulta) {
         this.dtConsulta = dtConsulta;
+    }
+    
+    public float getVlConsulta() {
+        return vlConsulta;
+    }
+
+    public void setVlConsulta(float dtConsulta) {
+        this.vlConsulta = dtConsulta;
+    }
+    
+    public Pagamento getPagamento() {
+    return pagamento;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
     }
 }
