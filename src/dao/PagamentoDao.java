@@ -85,7 +85,7 @@ public class PagamentoDao {
         }
     }
 
-    public ArrayList<Pagamento> consultar() {
+    public ArrayList<Pagamento> getTodosRegistros() {
         ArrayList<Pagamento> listaPagamentos = new ArrayList<Pagamento>();
         String sql = "SELECT idPagamento, idUsuario, idConsulta, flStatus, dtInclusao, idFormaPagto FROM tbPagamentos";
         

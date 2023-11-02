@@ -30,6 +30,8 @@ import org.jfree.data.general.DefaultPieDataset;
 public class jfDashboard extends javax.swing.JFrame {
     private ArrayList<Usuario> listaUsuarios;
     private ArrayList<Consulta> listaConsultas;
+    private ArrayList<Pagamento> listaPagamentos;
+    
     /**
      * Creates new form jfHome
      */
@@ -244,6 +246,7 @@ public class jfDashboard extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
        atualizaInfosCadastros(new UsuarioDao());
        atualizaInfosConsultas(new ConsultaDao());
+       atualizaInfosPagamentos(new PagamentoDao());
     }//GEN-LAST:event_formWindowOpened
 
     private void atualizaInfosCadastros(UsuarioDao usuarioDao) {
@@ -280,6 +283,31 @@ public class jfDashboard extends javax.swing.JFrame {
                         listaConsultas = consultaDao.getTodosRegistros();
                         
                         labelQtdeConsultas.setText(Integer.toString(listaConsultas.size()));
+
+                        try {
+                            Thread.sleep(1000); 
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Ocorreu um erro inesperado:\n" + ex.getMessage(), "ERRO!", JOptionPane.ERROR_MESSAGE);
+                        Thread.currentThread().interrupt();
+                        setVisible(false);
+                    }
+                }
+            }
+        }.start();
+    }
+    
+    private void atualizaInfosPagamentos(PagamentoDao pagamentoDao) {
+        new Thread() {
+            @Override
+            public void run() {
+                while (!Thread.currentThread().isInterrupted()) {
+                    try {
+                        listaPagamentos = pagamentoDao.getTodosRegistros();
+                        
+                        
 
                         try {
                             Thread.sleep(1000); 

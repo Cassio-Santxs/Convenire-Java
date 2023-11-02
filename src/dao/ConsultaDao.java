@@ -26,28 +26,33 @@ public class ConsultaDao {
     }
     
     public boolean insert(Consulta consulta) {
-        String sql = "INSERT INTO tbConsultas (idUsuario, dtConsulta, vlConsulta) VALUES (?, ?, 100)";
+    String sqlConsulta = "INSERT INTO tbConsultas (idUsuario, dtConsulta, vlConsulta) VALUES (?, ?, 100)";
+    String sqlPagamento = "INSERT INTO tbPagamentos (dtInclusao, flStatus, idFormaPagto, idUsuario, vlPagamento) VALUES (?, 'Pendente', 1, ?, 100)";
 
-        try {
-            if (conexao.conectar()) {
-                PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
+    try {
+        if (conexao.conectar()) {
+                PreparedStatement sentencaConsulta = conexao.getConnection().prepareStatement(sqlConsulta);
+                sentencaConsulta.setInt(1, consulta.getIdUsuario());
+                sentencaConsulta.setTimestamp(2, new java.sql.Timestamp(consulta.getDtConsulta().getTime()));
+                int linhasAfetadasConsulta = sentencaConsulta.executeUpdate();
+                sentencaConsulta.close();
 
-                sentenca.setInt(1, consulta.getIdUsuario());
-                sentenca.setTimestamp(2, new java.sql.Timestamp(consulta.getDtConsulta().getTime()));
+                PreparedStatement sentencaPagamento = conexao.getConnection().prepareStatement(sqlPagamento);
+                sentencaPagamento.setTimestamp(1, new java.sql.Timestamp(System.currentTimeMillis()));
+                sentencaPagamento.setInt(2, consulta.getIdUsuario());
+                int linhasAfetadasPagamento = sentencaPagamento.executeUpdate();
+                sentencaPagamento.close();
 
-                int linhasAfetadas = sentenca.executeUpdate();
+                conexao.getConnection().close();
 
-                sentenca.close();
-                this.conexao.getConnection().close();
-
-                return linhasAfetadas > 0;
+                return (linhasAfetadasConsulta > 0) && (linhasAfetadasPagamento > 0);
             }
-
-            return false; 
+            return false;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }
+
     
     public void alterar(Consulta consulta) {
         String sql = "UPDATE tbConsultas SET dtConsulta = ? WHERE idConsulta = ?";
@@ -63,6 +68,7 @@ public class ConsultaDao {
                 
                 sentenca.execute();
                 sentenca.close();
+                
                 this.conexao.getConnection().close();
             }
         }
@@ -136,7 +142,7 @@ public class ConsultaDao {
     }
     
     public ArrayList<Consulta> getTodosRegistros() {
-        String sql = "SELECT * FROM tbConsultas C LEFT JOIN tbPagamentos P on C.idConsulta = P.idConsulta";
+        String sql = "SELECT * FROM tbConsultas";
         ArrayList<Consulta> listaConsultas = new ArrayList<Consulta>();
         
         try {
@@ -150,13 +156,6 @@ public class ConsultaDao {
                     consulta.setIdConsulta(resultadoSentenca.getInt("idConsulta"));
                     consulta.setDtConsulta(resultadoSentenca.getTimestamp("dtConsulta"));
                     consulta.setVlConsulta(resultadoSentenca.getFloat("vlConsulta"));
-
-                    Pagamento pagamento = new Pagamento();
-                    pagamento.setIdPagamento(resultadoSentenca.getInt("idPagamento"));
-                    pagamento.setFlStatus(resultadoSentenca.getString("flStatus"));
-                    pagamento.setDtInclusao(resultadoSentenca.getTimestamp("dtInclusao"));
-
-                    consulta.setPagamento(pagamento);
 
                     listaConsultas.add(consulta);
                 }
