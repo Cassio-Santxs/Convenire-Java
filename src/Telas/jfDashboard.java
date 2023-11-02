@@ -10,6 +10,8 @@ import Models.Usuario;
 import dao.ConsultaDao;
 import dao.PagamentoDao;
 import dao.UsuarioDao;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +22,12 @@ import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -59,7 +67,7 @@ public class jfDashboard extends javax.swing.JFrame {
         pagamentoLabel = new javax.swing.JLabel();
         jlTotalCadastros2 = new javax.swing.JPanel();
         labelQtdeConsultas = new javax.swing.JLabel();
-        columnsPanel = new javax.swing.JPanel();
+        pizzaPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -169,15 +177,15 @@ public class jfDashboard extends javax.swing.JFrame {
                 .addContainerGap(65, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout columnsPanelLayout = new javax.swing.GroupLayout(columnsPanel);
-        columnsPanel.setLayout(columnsPanelLayout);
-        columnsPanelLayout.setHorizontalGroup(
-            columnsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pizzaPanelLayout = new javax.swing.GroupLayout(pizzaPanel);
+        pizzaPanel.setLayout(pizzaPanelLayout);
+        pizzaPanelLayout.setHorizontalGroup(
+            pizzaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        columnsPanelLayout.setVerticalGroup(
-            columnsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 206, Short.MAX_VALUE)
+        pizzaPanelLayout.setVerticalGroup(
+            pizzaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 270, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -185,19 +193,19 @@ public class jfDashboard extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
+                .addContainerGap(40, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(columnsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pizzaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(usuarioLabel)
                             .addComponent(jlTotalCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pagamentoLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(consltaLabel)
                             .addComponent(jlTotalCadastros2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(56, 56, 56))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,7 +221,7 @@ public class jfDashboard extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addComponent(pagamentoLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(columnsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pizzaPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
         );
 
@@ -244,71 +252,54 @@ public class jfDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-       atualizaInfosCadastros(new UsuarioDao());
-       atualizaInfosConsultas(new ConsultaDao());
-       atualizaInfosPagamentos(new PagamentoDao());
+       atualizaInfos(new UsuarioDao(), new ConsultaDao(), new PagamentoDao());
+      // atualizaInfosPagamentos(new PagamentoDao());
     }//GEN-LAST:event_formWindowOpened
 
-    private void atualizaInfosCadastros(UsuarioDao usuarioDao) {
+    private void atualizaInfos(UsuarioDao usuarioDao, ConsultaDao consultaDao, PagamentoDao pagamentoDao) {
         new Thread() {
             @Override
             public void run() {
                 while (!Thread.currentThread().isInterrupted()) {
                     try {
+                        // Usuários
                         listaUsuarios = usuarioDao.getTodosRegistros();
                         
                         labelQtdeCadastros.setText(Integer.toString(listaUsuarios.size()));
-
-                        try {
-                            Thread.sleep(1000); 
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, "Ocorreu um erro inesperado:\n" + ex.getMessage(), "ERRO!", JOptionPane.ERROR_MESSAGE);
-                        Thread.currentThread().interrupt();
-                        setVisible(false);
-                    }
-                }
-            }
-        }.start();
-    }
-    
-    private void atualizaInfosConsultas(ConsultaDao consultaDao) {
-        new Thread() {
-            @Override
-            public void run() {
-                while (!Thread.currentThread().isInterrupted()) {
-                    try {
+                        
+                        // Consultas
                         listaConsultas = consultaDao.getTodosRegistros();
                         
                         labelQtdeConsultas.setText(Integer.toString(listaConsultas.size()));
-
-                        try {
-                            Thread.sleep(1000); 
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, "Ocorreu um erro inesperado:\n" + ex.getMessage(), "ERRO!", JOptionPane.ERROR_MESSAGE);
-                        Thread.currentThread().interrupt();
-                        setVisible(false);
-                    }
-                }
-            }
-        }.start();
-    }
-    
-    private void atualizaInfosPagamentos(PagamentoDao pagamentoDao) {
-        new Thread() {
-            @Override
-            public void run() {
-                while (!Thread.currentThread().isInterrupted()) {
-                    try {
+                        
+                        // Pagamentos
                         listaPagamentos = pagamentoDao.getTodosRegistros();
                         
-                        
+                        int qtdPagos = 0;
+                        int qtdPendentes = 0;
+                    
+                        DefaultPieDataset pizzaChartData = new DefaultPieDataset();
 
+                        for(Pagamento pagamento : listaPagamentos)
+                        {
+                             if("Pendente".equals(pagamento.getFlStatus()))
+                                 qtdPendentes = qtdPendentes + 1;   
+                             else
+                                 qtdPagos = qtdPendentes + 1;   
+                        }
+                        
+                        pizzaChartData.setValue("Pendentes", qtdPendentes);
+                        pizzaChartData.setValue("Pagos", qtdPagos);
+                        
+                        JFreeChart pizzaChart = ChartFactory.createPieChart("", pizzaChartData);
+                        PiePlot pizzachrt = (PiePlot)pizzaChart.getPlot();
+                        
+                        ChartPanel ChartPizza = new ChartPanel(pizzaChart);
+                        
+                        pizzaPanel.removeAll();
+                        pizzaPanel.add(ChartPizza,BorderLayout.CENTER);
+                        pizzaPanel.validate();
+                        
                         try {
                             Thread.sleep(1000); 
                         } catch (InterruptedException e) {
@@ -323,8 +314,6 @@ public class jfDashboard extends javax.swing.JFrame {
             }
         }.start();
     }
-
-    
    
     /**
      * @param args the command line arguments
@@ -365,7 +354,6 @@ public class jfDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel columnsPanel;
     private javax.swing.JLabel consltaLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -376,6 +364,7 @@ public class jfDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel labelQtdeCadastros;
     private javax.swing.JLabel labelQtdeConsultas;
     private javax.swing.JLabel pagamentoLabel;
+    private javax.swing.JPanel pizzaPanel;
     private javax.swing.JLabel usuarioLabel;
     // End of variables declaration//GEN-END:variables
 }
