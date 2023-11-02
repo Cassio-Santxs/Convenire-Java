@@ -122,11 +122,11 @@ public class jfLogin extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(loginLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(emailInput, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(emailInput, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(senhaLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(senhaInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(senhaInput, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(loginButton)
                 .addContainerGap(38, Short.MAX_VALUE))
@@ -146,7 +146,7 @@ public class jfLogin extends javax.swing.JFrame {
             .addGroup(ContainerLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addComponent(formContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -182,7 +182,6 @@ public class jfLogin extends javax.swing.JFrame {
                 marcarConsultaFrame.setVisible(true);
             } else {
                 jfDashboard dashboardFrame = new Telas.jfDashboard();
-                dashboardFrame.idUsuario = usuarioAutenticado.getIdUsuario();
                 dashboardFrame.setVisible(true); 
             }
             

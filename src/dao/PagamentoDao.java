@@ -85,9 +85,9 @@ public class PagamentoDao {
         }
     }
 
-    public ArrayList<Pagamento> consultar(int idUsuario) {
+    public ArrayList<Pagamento> consultar() {
         ArrayList<Pagamento> listaPagamentos = new ArrayList<Pagamento>();
-        String sql = "SELECT idPagamento, idUsuario, idConsulta, flStatus, dtInclusao, idFormaPagto, dtExclusao, dtAlteracao FROM tbPagamentos";
+        String sql = "SELECT idPagamento, idUsuario, idConsulta, flStatus, dtInclusao, idFormaPagto FROM tbPagamentos";
         
         try {
             if (conexao.conectar()) {
@@ -104,8 +104,6 @@ public class PagamentoDao {
                     pagamento.setFlStatus(resultado.getString("flStatus"));
                     pagamento.setDtInclusao(resultado.getTimestamp("dtInclusao"));
                     pagamento.setIdFormaPagto(resultado.getInt("idFormaPagto"));
-                    pagamento.setDtExclusao(resultado.getTimestamp("dtExclusao"));
-                    pagamento.setDtAlteracao(resultado.getTimestamp("dtAlteracao"));
                     
                     listaPagamentos.add(pagamento);
                 }

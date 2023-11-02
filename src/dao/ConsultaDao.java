@@ -96,7 +96,7 @@ public class ConsultaDao {
     
     public ArrayList<Consulta> consultar(int idUsuario) {
     ArrayList<Consulta> listaConsulta = new ArrayList<Consulta>();
-    String sql = "SELECT C.idConsulta, C.dtConsulta, P.idPagamento, P.flStatus, P.dtInclusao " +
+    String sql = "SELECT C.idConsulta, C.dtConsulta, P.idPagamento, P.flStatus, P.dtInclusao, C.vlConsulta " +
                  "FROM tbConsultas C " +
                  "LEFT JOIN tbPagamentos P ON C.idConsulta = P.idConsulta " +
                  "WHERE C.idUsuario = ? " +
@@ -113,6 +113,7 @@ public class ConsultaDao {
                 Consulta consulta = new Consulta();
                 consulta.setIdConsulta(resultadoSentenca.getInt("idConsulta"));
                 consulta.setDtConsulta(resultadoSentenca.getTimestamp("dtConsulta"));
+                consulta.setVlConsulta(resultadoSentenca.getFloat("vlConsulta"));
 
                 Pagamento pagamento = new Pagamento();
                 pagamento.setIdPagamento(resultadoSentenca.getInt("idPagamento"));
@@ -133,5 +134,42 @@ public class ConsultaDao {
             throw new RuntimeException(ex);
         }
     }
+    
+    public ArrayList<Consulta> getTodosRegistros() {
+        String sql = "SELECT * FROM tbConsultas C LEFT JOIN tbPagamentos P on C.idConsulta = P.idConsulta";
+        ArrayList<Consulta> listaConsultas = new ArrayList<Consulta>();
+        
+        try {
+            if (conexao.conectar()) {
+                PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
 
+                ResultSet resultadoSentenca = sentenca.executeQuery();
+                
+                while (resultadoSentenca.next()) {
+                    Consulta consulta = new Consulta();
+                    consulta.setIdConsulta(resultadoSentenca.getInt("idConsulta"));
+                    consulta.setDtConsulta(resultadoSentenca.getTimestamp("dtConsulta"));
+                    consulta.setVlConsulta(resultadoSentenca.getFloat("vlConsulta"));
+
+                    Pagamento pagamento = new Pagamento();
+                    pagamento.setIdPagamento(resultadoSentenca.getInt("idPagamento"));
+                    pagamento.setFlStatus(resultadoSentenca.getString("flStatus"));
+                    pagamento.setDtInclusao(resultadoSentenca.getTimestamp("dtInclusao"));
+
+                    consulta.setPagamento(pagamento);
+
+                    listaConsultas.add(consulta);
+                }
+                
+                sentenca.close();
+                this.conexao.getConnection().close();
+                
+                return listaConsultas;
+            }
+
+            return null; 
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

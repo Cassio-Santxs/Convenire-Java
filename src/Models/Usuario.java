@@ -14,6 +14,7 @@ public class Usuario {
     private String nrDoc;
     private String dsEmail;
     private String dsSenha;
+    private String nrTelefone;
     private boolean flAdmin;
     
     public Usuario() {
@@ -76,4 +77,13 @@ public class Usuario {
     public void setFlAdmin(boolean flAdmin) {
         this.flAdmin = flAdmin;
     } 
+    
+    public String getNrTelefone() {
+        return nrTelefone;
+    }
+
+    public void setNrTelefone(String nrTelefone) {
+        this.nrTelefone = nrTelefone;
+    } 
+    
 }

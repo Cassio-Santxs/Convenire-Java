@@ -5,8 +5,10 @@
 package Telas;
 
 import Models.Consulta;
+import Models.Pagamento;
 import Models.Usuario;
 import dao.ConsultaDao;
+import dao.PagamentoDao;
 import dao.UsuarioDao;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,19 +18,18 @@ import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 /**
  *
  * @author Aluno 63
  */
 public class jfDashboard extends javax.swing.JFrame {
-    public int idUsuario;
-    private Usuario usuario;
-
-    public jfDashboard(int idUsuario) {
-        this.idUsuario = idUsuario;
-    }
+    private ArrayList<Usuario> listaUsuarios;
+    private ArrayList<Consulta> listaConsultas;
     /**
      * Creates new form jfHome
      */
@@ -45,23 +46,18 @@ public class jfDashboard extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtConsultas = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        loginLabel = new javax.swing.JLabel();
-        nmPacienteInput = new javax.swing.JTextField();
-        loginLabel1 = new javax.swing.JLabel();
-        btnInserir = new javax.swing.JButton();
-        loginLabel2 = new javax.swing.JLabel();
-        idConsultaInput = new javax.swing.JTextField();
-        btnAlterar = new javax.swing.JButton();
-        btnExcluir = new javax.swing.JButton();
-        dtConsultaInput = new com.toedter.calendar.JDateChooser();
-        loginLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        consltaLabel = new javax.swing.JLabel();
+        usuarioLabel = new javax.swing.JLabel();
+        jlTotalCadastros = new javax.swing.JPanel();
+        labelQtdeCadastros = new javax.swing.JLabel();
+        pagamentoLabel = new javax.swing.JLabel();
+        jlTotalCadastros2 = new javax.swing.JPanel();
+        labelQtdeConsultas = new javax.swing.JLabel();
+        columnsPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -71,10 +67,7 @@ public class jfDashboard extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(244, 244, 244));
-
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 204, 153)));
 
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -86,342 +79,225 @@ public class jfDashboard extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap()
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(13, Short.MAX_VALUE)
+                .addGap(15, 15, 15)
                 .addComponent(jLabel1)
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
-        jtConsultas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Id", "Data Consulta"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jtConsultas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jtConsultasMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jtConsultas);
-
-        jPanel3.setBackground(new java.awt.Color(255, 207, 0));
-
-        loginLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        loginLabel.setForeground(new java.awt.Color(255, 255, 255));
-        loginLabel.setText("Paciente");
-        loginLabel.setName("loginLabel"); // NOI18N
-
-        nmPacienteInput.setEditable(false);
-        nmPacienteInput.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nmPacienteInputActionPerformed(evt);
-            }
-        });
-
-        loginLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        loginLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        loginLabel1.setText("Data Consulta");
-        loginLabel1.setName("loginLabel"); // NOI18N
-
-        btnInserir.setText("Marcar");
-        btnInserir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInserirActionPerformed(evt);
-            }
-        });
-
-        loginLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        loginLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        loginLabel2.setText("Id Consulta");
-        loginLabel2.setName("loginLabel"); // NOI18N
-
-        idConsultaInput.setEditable(false);
-        idConsultaInput.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                idConsultaInputActionPerformed(evt);
-            }
-        });
-
-        btnAlterar.setText("Alterar");
-        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAlterarActionPerformed(evt);
-            }
-        });
-
-        btnExcluir.setText("Excluir");
-        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExcluirActionPerformed(evt);
-            }
-        });
-
-        loginLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        loginLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        loginLabel3.setText("Valor da consulta");
-        loginLabel3.setName("loginLabel"); // NOI18N
-
-        jTextField1.setText("R$ 100.00");
-        jTextField1.setEnabled(false);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(loginLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(idConsultaInput, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nmPacienteInput, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(loginLabel))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(loginLabel1)
-                    .addComponent(dtConsultaInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(loginLabel3))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnExcluir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAlterar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnInserir)
-                .addGap(22, 22, 22))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(loginLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(idConsultaInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(loginLabel3)
-                            .addGap(2, 2, 2)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(loginLabel)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                    .addComponent(loginLabel1)
-                                    .addGap(2, 2, 2)))
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(dtConsultaInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(nmPacienteInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(14, 14, 14)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnInserir)
-                    .addComponent(btnAlterar)
-                    .addComponent(btnExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel1.setBackground(new java.awt.Color(244, 244, 244));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(0, 562, Short.MAX_VALUE)
+        );
+
+        jPanel3.setBackground(new java.awt.Color(255, 207, 0));
+
+        consltaLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        consltaLabel.setForeground(new java.awt.Color(255, 255, 255));
+        consltaLabel.setText("Consultas Agendadas");
+        consltaLabel.setName("loginLabel"); // NOI18N
+
+        usuarioLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        usuarioLabel.setForeground(new java.awt.Color(255, 255, 255));
+        usuarioLabel.setText("Usuários Cadastrados");
+        usuarioLabel.setName("loginLabel"); // NOI18N
+
+        jlTotalCadastros.setBackground(new java.awt.Color(255, 255, 255));
+        jlTotalCadastros.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        labelQtdeCadastros.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        labelQtdeCadastros.setText("0");
+
+        javax.swing.GroupLayout jlTotalCadastrosLayout = new javax.swing.GroupLayout(jlTotalCadastros);
+        jlTotalCadastros.setLayout(jlTotalCadastrosLayout);
+        jlTotalCadastrosLayout.setHorizontalGroup(
+            jlTotalCadastrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jlTotalCadastrosLayout.createSequentialGroup()
+                .addGap(86, 86, 86)
+                .addComponent(labelQtdeCadastros)
+                .addContainerGap(93, Short.MAX_VALUE))
+        );
+        jlTotalCadastrosLayout.setVerticalGroup(
+            jlTotalCadastrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jlTotalCadastrosLayout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(labelQtdeCadastros)
+                .addContainerGap(65, Short.MAX_VALUE))
+        );
+
+        pagamentoLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        pagamentoLabel.setForeground(new java.awt.Color(255, 255, 255));
+        pagamentoLabel.setText("Pagamentos");
+        pagamentoLabel.setName("loginLabel"); // NOI18N
+
+        jlTotalCadastros2.setBackground(new java.awt.Color(255, 255, 255));
+        jlTotalCadastros2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        labelQtdeConsultas.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        labelQtdeConsultas.setText("0");
+
+        javax.swing.GroupLayout jlTotalCadastros2Layout = new javax.swing.GroupLayout(jlTotalCadastros2);
+        jlTotalCadastros2.setLayout(jlTotalCadastros2Layout);
+        jlTotalCadastros2Layout.setHorizontalGroup(
+            jlTotalCadastros2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jlTotalCadastros2Layout.createSequentialGroup()
+                .addGap(86, 86, 86)
+                .addComponent(labelQtdeConsultas)
+                .addContainerGap(93, Short.MAX_VALUE))
+        );
+        jlTotalCadastros2Layout.setVerticalGroup(
+            jlTotalCadastros2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jlTotalCadastros2Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(labelQtdeConsultas)
+                .addContainerGap(65, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout columnsPanelLayout = new javax.swing.GroupLayout(columnsPanel);
+        columnsPanel.setLayout(columnsPanelLayout);
+        columnsPanelLayout.setHorizontalGroup(
+            columnsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        columnsPanelLayout.setVerticalGroup(
+            columnsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 206, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(columnsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(usuarioLabel)
+                            .addComponent(jlTotalCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pagamentoLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(consltaLabel)
+                            .addComponent(jlTotalCadastros2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(56, 56, 56))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(consltaLabel)
+                    .addComponent(usuarioLabel))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlTotalCadastros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlTotalCadastros2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addComponent(pagamentoLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(columnsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(20, 20, 20))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nmPacienteInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nmPacienteInputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nmPacienteInputActionPerformed
-
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        Usuario usr = new UsuarioDao().getUsuarioById(this.idUsuario);
-        nmPacienteInput.setText(usr.getNmUsuario() + "");
-        
-        atualizaTabela(new ConsultaDao());
+       atualizaInfosCadastros(new UsuarioDao());
+       atualizaInfosConsultas(new ConsultaDao());
     }//GEN-LAST:event_formWindowOpened
 
-    private void btnInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirActionPerformed
-        Date dataSelecionada = dtConsultaInput.getDate();
-        
-        if (dataSelecionada != null) {
-            Consulta consulta = new Consulta();
-            
-            consulta.setIdUsuario(this.idUsuario);
-            consulta.setDtConsulta(dataSelecionada);
-            
-            ConsultaDao consultaDao = new ConsultaDao();
-            boolean insercaoBemSucedida = consultaDao.insert(consulta);
-            
-            if (insercaoBemSucedida) {
-                atualizaTabela(consultaDao);
-                JOptionPane.showMessageDialog(this, "Consulta agendada com sucesso!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Erro ao agendar a consulta.");
-            }
-        } else {
-            // Caso a data selecionada seja nula, exiba uma mensagem de erro
-            JOptionPane.showMessageDialog(this, "Selecione uma data válida.");
-        }
-    }//GEN-LAST:event_btnInserirActionPerformed
+    private void atualizaInfosCadastros(UsuarioDao usuarioDao) {
+        new Thread() {
+            @Override
+            public void run() {
+                while (!Thread.currentThread().isInterrupted()) {
+                    try {
+                        listaUsuarios = usuarioDao.getTodosRegistros();
+                        
+                        labelQtdeCadastros.setText(Integer.toString(listaUsuarios.size()));
 
-    private void jtConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtConsultasMouseClicked
-        if (jtConsultas.getSelectedRow() != -1) {
-            idConsultaInput.setText(jtConsultas.getValueAt(jtConsultas.getSelectedRow(),0).toString());
-            
-            Object valorData = jtConsultas.getValueAt(jtConsultas.getSelectedRow(), 1);
-
-            if (valorData instanceof Date dataSelecionada) {
-                dtConsultaInput.setDate(dataSelecionada);
-            } 
-        } 
-    }//GEN-LAST:event_jtConsultasMouseClicked
-
-    private void idConsultaInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idConsultaInputActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_idConsultaInputActionPerformed
-
-    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-        if(jtConsultas.getSelectedRow() != -1){
-            Date dataSelecionada = dtConsultaInput.getDate();
-
-            Consulta consulta = new Consulta();
-            consulta.setIdConsulta(Integer.parseInt(idConsultaInput.getText()));
-            consulta.setIdUsuario(this.idUsuario);
-            
-            if (dataSelecionada != null) {
-                consulta.setDtConsulta(dataSelecionada);
-            } else {
-                JOptionPane.showMessageDialog(this, "Selecione uma data válida.");
-            }
-
-            ConsultaDao cadastroDao = new ConsultaDao();
-            cadastroDao.alterar(consulta);
-
-            atualizaTabela(cadastroDao);
-            JOptionPane.showMessageDialog(null, "Consulta alterada com sucesso!", "", INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "Selecione um Cadastro para Alterar!");
-        }
-    }//GEN-LAST:event_btnAlterarActionPerformed
-
-    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        try
-        {
-            int linhaSelecionada = jtConsultas.getSelectedRow(); //resgata o número da linha selecionada na tabela
-
-            if(linhaSelecionada == -1)
-            {
-                JOptionPane.showMessageDialog(null, "Selecione uma consulta para cancelar!", "ATENÇÃO!", WARNING_MESSAGE);
-            }
-            else
-            {
-                this.idConsultaInput.setText(jtConsultas.getValueAt(linhaSelecionada, 0).toString());
-
-                int opcao = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja cancelar a consulta?");
-
-                if(opcao == 0)
-                {
-                    ConsultaDao consultaDao = new ConsultaDao(); 
-                    consultaDao.excluirById(Integer.parseInt(this.idConsultaInput.getText()));
-
-                    atualizaTabela(consultaDao);
+                        try {
+                            Thread.sleep(1000); 
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Ocorreu um erro inesperado:\n" + ex.getMessage(), "ERRO!", JOptionPane.ERROR_MESSAGE);
+                        Thread.currentThread().interrupt();
+                        setVisible(false);
+                    }
                 }
             }
-        }
-        catch(Exception ex)
-        {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro inesperado:\n" + ex.getMessage(), "ERRO!", ERROR_MESSAGE);
-        }    
-    }//GEN-LAST:event_btnExcluirActionPerformed
-
-    private void atualizaTabela(ConsultaDao consultaDao)
-    {
-        try
-        {
-            limparTabela();
-            
-            ArrayList<Consulta> listaCadastros;
-            listaCadastros = consultaDao.consultar(this.idUsuario); 
-            
-            DefaultTableModel modeloTabela = (DefaultTableModel) jtConsultas.getModel();
-
-            for(Consulta consulta : listaCadastros)
-            {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                String dataFormatada = dateFormat.format(consulta.getDtConsulta());
-
-                modeloTabela.addRow(new String[]{Integer.toString(consulta.getIdConsulta()), dataFormatada});
-            }
-        }
-        catch(Exception ex)
-        {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro inesperado:\n" + ex.getMessage(), "ERRO!", ERROR_MESSAGE);
-        }
+        }.start();
     }
     
-    private void limparTabela()
-    {
-        while(jtConsultas.getRowCount() > 0) 
-        {
-            DefaultTableModel dm = (DefaultTableModel) jtConsultas.getModel();
-            dm.getDataVector().removeAllElements();
-        }
+    private void atualizaInfosConsultas(ConsultaDao consultaDao) {
+        new Thread() {
+            @Override
+            public void run() {
+                while (!Thread.currentThread().isInterrupted()) {
+                    try {
+                        listaConsultas = consultaDao.getTodosRegistros();
+                        
+                        labelQtdeConsultas.setText(Integer.toString(listaConsultas.size()));
+
+                        try {
+                            Thread.sleep(1000); 
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Ocorreu um erro inesperado:\n" + ex.getMessage(), "ERRO!", JOptionPane.ERROR_MESSAGE);
+                        Thread.currentThread().interrupt();
+                        setVisible(false);
+                    }
+                }
+            }
+        }.start();
     }
+
+    
+   
     /**
      * @param args the command line arguments
      */
@@ -461,22 +337,17 @@ public class jfDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAlterar;
-    private javax.swing.JButton btnExcluir;
-    private javax.swing.JButton btnInserir;
-    private com.toedter.calendar.JDateChooser dtConsultaInput;
-    private javax.swing.JTextField idConsultaInput;
+    private javax.swing.JPanel columnsPanel;
+    private javax.swing.JLabel consltaLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTable jtConsultas;
-    private javax.swing.JLabel loginLabel;
-    private javax.swing.JLabel loginLabel1;
-    private javax.swing.JLabel loginLabel2;
-    private javax.swing.JLabel loginLabel3;
-    private javax.swing.JTextField nmPacienteInput;
+    private javax.swing.JPanel jlTotalCadastros;
+    private javax.swing.JPanel jlTotalCadastros2;
+    private javax.swing.JLabel labelQtdeCadastros;
+    private javax.swing.JLabel labelQtdeConsultas;
+    private javax.swing.JLabel pagamentoLabel;
+    private javax.swing.JLabel usuarioLabel;
     // End of variables declaration//GEN-END:variables
 }

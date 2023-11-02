@@ -9,18 +9,15 @@ public class Pagamento {
     private String flStatus;
     private Date dtInclusao;
     private int idFormaPagto;
-    private Date dtExclusao;
-    private Date dtAlteracao;
 
     public Pagamento() {
         // Construtor padrão
     }
 
-    public Pagamento(int idUsuario, int idConsulta, String flStatus, Date dtInclusao, int idFormaPagto) {
+    public Pagamento(int idUsuario, int idConsulta, String flStatus, int idFormaPagto) {
         this.idUsuario = idUsuario;
         this.idConsulta = idConsulta;
         this.flStatus = flStatus;
-        this.dtInclusao = dtInclusao;
         this.idFormaPagto = idFormaPagto;
     }
 
@@ -70,21 +67,5 @@ public class Pagamento {
 
     public void setIdFormaPagto(int idFormaPagto) {
         this.idFormaPagto = idFormaPagto;
-    }
-
-    public Date getDtExclusao() {
-        return dtExclusao;
-    }
-
-    public void setDtExclusao(Date dtExclusao) {
-        this.dtExclusao = dtExclusao;
-    }
-
-    public Date getDtAlteracao() {
-        return dtAlteracao;
-    }
-
-    public void setDtAlteracao(Date dtAlteracao) {
-        this.dtAlteracao = dtAlteracao;
     }
 }

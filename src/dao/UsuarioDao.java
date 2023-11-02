@@ -9,6 +9,7 @@ import dao.ConexaoBanco;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  *
@@ -65,7 +66,7 @@ public class UsuarioDao {
             return false;
         }
 
-        String sql = "INSERT INTO tbUsuarios (dsEmail, dsSenha, nmUsuario, nrDoc, flAdmin) VALUES (?, ?, ?, ?, 0)";
+        String sql = "INSERT INTO tbUsuarios (dsEmail, dsSenha, nmUsuario, nrDoc, nrTelefone, flAdmin) VALUES (?, ?, ?, ?, ?, 0)";
 
         try {
             if (conexao.conectar()) {
@@ -75,6 +76,7 @@ public class UsuarioDao {
                 sentenca.setString(2, usuario.getDsSenha());
                 sentenca.setString(3, usuario.getNmUsuario());
                 sentenca.setString(4, usuario.getNrDoc());
+                sentenca.setString(5, usuario.getNrTelefone());
 
                 int linhasAfetadas = sentenca.executeUpdate();
 
@@ -142,6 +144,39 @@ public class UsuarioDao {
 
                 sentenca.close();
                 this.conexao.getConnection().close();
+            }
+
+            return null; 
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    
+    public ArrayList<Usuario> getTodosRegistros() {
+        String sql = "SELECT * FROM tbUsuarios";
+        ArrayList<Usuario> listaUsuarios = new ArrayList<Usuario>();
+        
+        try {
+            if (conexao.conectar()) {
+                PreparedStatement sentenca = conexao.getConnection().prepareStatement(sql);
+
+                ResultSet rs = sentenca.executeQuery();
+                
+                while (rs.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("idUsuario"));
+                    usuario.setNmUsuario(rs.getString("nmUsuario"));
+                    usuario.setNrDoc(rs.getString("nrDoc"));
+                    usuario.setDsEmail(rs.getString("dsEmail"));
+                    usuario.setDsSenha(rs.getString("dsSenha"));
+                    
+                    listaUsuarios.add(usuario);
+                }
+                
+                sentenca.close();
+                this.conexao.getConnection().close();
+                
+                return listaUsuarios;
             }
 
             return null; 
